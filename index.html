@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Digital de Funciones - Universidad Santo Tomás</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('https://img.freepik.com/vector-gratis/fondo-matematicas-realista-estilo-memphis_23-2148146940.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+    header {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 10px;
+      display: flex;
+      align-items: center;
+    }
+    header img {
+      height: 50px;
+      margin-right: 15px;
+    }
+    header h1 {
+      font-size: 22px;
+    }
+    .container {
+      background-color: rgba(0, 0, 0, 0.7);
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 30px;
+      border-radius: 10px;
+    }
+    .container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input, select, button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    #resultados, #pasos {
+      display: none;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 700px;
+    }
+    #pasos h3 {
+      margin-top: 0;
+    }
+    .creditos {
+      text-align: center;
+      font-size: 12px;
+      margin-top: 20px;
+    }
+    .toggle-controls {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .toggle-controls button {
+      margin: 0 5px;
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img id="logoUSTA" src="https://seeklogo.com/images/U/universidad-santo-tomas-logo-64F340C41C-seeklogo.com.png" alt="Logo USTA">
+    <h1>Calculadora Digital de Funciones - Universidad Santo Tomás</h1>
+  </header>
+
+  <div class="container">
+    <h2>Analizar Función</h2>
+    <select id="tipoFuncion">
+      <option value="lineal">Lineal (ax + b)</option>
+      <option value="cuadratica">Cuadrática (ax² + bx + c)</option>
+      <option value="constante">Constante (f(x) = c)</option>
+    </select>
+    <input type="number" id="coefA" placeholder="Coeficiente a">
+    <input type="number" id="coefB" placeholder="Coeficiente b">
+    <input type="number" id="coefC" placeholder="Coeficiente c">
+    <button onclick="analizarFuncion()">Analizar</button>
+    <div class="toggle-controls">
+      <button onclick="toggleLogo()">Mostrar/Ocultar Logo</button>
+      <button onclick="toggleFondo()">Activar/Desactivar Fondo</button>
+    </div>
+  </div>
+
+  <div id="resultados">
+    <h2>Resultados del Análisis</h2>
+    <div id="contenidoResultados"></div>
+    <button onclick="mostrarPasos()">Ver pasos</button>
+  </div>
+
+  <div id="pasos">
+    <h3>Pasos del Cálculo</h3>
+    <div id="contenidoPasos"></div>
+  </div>
+
+  <div class="creditos">
+    Autores: Riveros Cano Christian Camilo; Sara Gabriela Cárdenas Acosta; Sara Daniela Pacavita García
+  </div>
+
+  <script>
+    let fondoActivo = true;
+
+    function toggleLogo() {
+      const logo = document.getElementById('logoUSTA');
+      logo.style.display = (logo.style.display === 'none') ? 'block' : 'none';
+    }
+
+    function toggleFondo() {
+      fondoActivo = !fondoActivo;
+      document.body.style.backgroundImage = fondoActivo ? "url('https://img.freepik.com/vector-gratis/fondo-matematicas-realista-estilo-memphis_23-2148146940.jpg')" : 'none';
+    }
+
+    function analizarFuncion() {
+      const tipo = document.getElementById('tipoFuncion').value;
+      const a = parseFloat(document.getElementById('coefA').value) || 0;
+      const b = parseFloat(document.getElementById('coefB').value) || 0;
+      const c = parseFloat(document.getElementById('coefC').value) || 0;
+      let resultados = '';
+      let pasos = '';
+
+      if (tipo === 'lineal') {
+        resultados += `<p><strong>Función:</strong> f(x) = ${a}x + ${b}</p>`;
+        resultados += `<p><strong>Dominio:</strong> Todos los reales (ℝ)</p>`;
+        resultados += `<p><strong>Rango:</strong> Todos los reales (ℝ)</p>`;
+        resultados += `<p><strong>Intersección con Y:</strong> (0, ${b})</p>`;
+        resultados += `<p><strong>Intersección con X:</strong> (${a !== 0 ? (-b/a).toFixed(2) : 'Ninguna'}, 0)</p>`;
+
+        pasos += `<p><strong>1.</strong> Identificar la forma general: ax + b</p>`;
+        pasos += `<p><strong>2.</strong> El dominio de una función lineal es ℝ, ya que no tiene restricciones.</p>`;
+        pasos += `<p><strong>3.</strong> El rango también es ℝ porque la recta puede tomar cualquier valor.</p>`;
+        pasos += `<p><strong>4.</strong> Para la intersección con Y, sustituimos x=0: f(0) = ${b}</p>`;
+        pasos += `<p><strong>5.</strong> Para la intersección con X, igualamos f(x) a 0: x = ${a !== 0 ? (-b/a).toFixed(2) : 'Ninguna'}</p>`;
+      } else if (tipo === 'cuadratica') {
+        const verticeX = -b / (2*a);
+        const verticeY = a * verticeX * verticeX + b * verticeX + c;
+        const discriminante = b*b - 4*a*c;
+
+        resultados += `<p><strong>Función:</strong> f(x) = ${a}x² + ${b}x + ${c}</p>`;
+        resultados += `<p><strong>Dominio:</strong> Todos los reales (ℝ)</p>`;
+        resultados += `<p><strong>Vértice:</strong> (${verticeX.toFixed(2)}, ${verticeY.toFixed(2)})</p>`;
+        resultados += `<p><strong>Intersección con Y:</strong> (0, ${c})</p>`;
+
+        if (discriminante >= 0) {
+          const x1 = (-b + Math.sqrt(discriminante)) / (2*a);
+          const x2 = (-b - Math.sqrt(discriminante)) / (2*a);
+          resultados += `<p><strong>Intersecciones con X:</strong> (${x1.toFixed(2)}, 0) y (${x2.toFixed(2)}, 0)</p>`;
+        } else {
+          resultados += `<p><strong>Intersecciones con X:</strong> No reales</p>`;
+        }
+
+        resultados += `<p><strong>Rango:</strong> ${a > 0 ? `[${verticeY.toFixed(2)}, ∞)` : `(-∞, ${verticeY.toFixed(2)}]`}</p>`;
+
+        pasos += `<p><strong>1.</strong> Identificar la forma general: ax² + bx + c</p>`;
+        pasos += `<p><strong>2.</strong> El dominio es ℝ, ya que no hay raíces ni divisiones por cero.</p>`;
+        pasos += `<p><strong>3.</strong> El vértice se calcula con x = -b / (2a), y se evalúa f(x).</p>`;
+        pasos += `<p><strong>4.</strong> Intersección con Y al evaluar f(0) = c</p>`;
+        pasos += `<p><strong>5.</strong> Intersecciones con X usando fórmula cuadrática si el discriminante ≥ 0.</p>`;
+      } else if (tipo === 'constante') {
+        resultados += `<p><strong>Función:</strong> f(x) = ${c}</p>`;
+        resultados += `<p><strong>Dominio:</strong> Todos los reales (ℝ)</p>`;
+        resultados += `<p><strong>Rango:</strong> {${c}}</p>`;
+        resultados += `<p><strong>Intersección con Y:</strong> (0, ${c})</p>`;
+        resultados += `<p><strong>Intersección con X:</strong> ${c !== 0 ? 'Ninguna' : '(x, 0) ∀ x ∈ ℝ'}</p>`;
+
+        pasos += `<p><strong>1.</strong> Es una función constante: f(x) = c</p>`;
+        pasos += `<p><strong>2.</strong> El dominio es ℝ, no hay restricciones.</p>`;
+        pasos += `<p><strong>3.</strong> El rango es solo el valor constante {${c}}</p>`;
+        pasos += `<p><strong>4.</strong> Siempre intersecta el eje Y en (0, ${c})</p>`;
+        pasos += `<p><strong>5.</strong> Solo se cruza con X si c = 0</p>`;
+      }
+
+      document.getElementById('contenidoResultados').innerHTML = resultados;
+      document.getElementById('contenidoPasos').innerHTML = pasos;
+      document.getElementById('resultados').style.display = 'block';
+    }
+
+    function mostrarPasos() {
+      const pasosDiv = document.getElementById('pasos');
+      pasosDiv.style.display = pasosDiv.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+</body>
+</html>
